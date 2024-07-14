@@ -1,19 +1,18 @@
 import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { UserModel } from "../models/user-model";
 const secret = process.env.JWT_TOKEN;
 
-import jwt from "jsonwebtoken";
-// import User from "../models/user";
-
 export const withAuth = async (
-  req: Request,
-  res: Response,
+  request: Request,
+  response: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization; //Token esperando na requisicao
+  const token = request.headers.authorization; //Token esperando na requisicao
   try {
-    if (!token)
-      res.status(401).json({ error: "Unauthorized: no token provided" });
-    else {
+    if (!token) {
+      response.status(401).json({ error: "Unauthorized: no token provided" });
+    } else {
       if (!secret) {
         return;
       }
@@ -21,18 +20,20 @@ export const withAuth = async (
       jwt.verify(token, secret, async (err, decoded) => {
         if (err) {
           console.log(err);
-          res.status(401).json({ error: "Unauthorized: Token Invalid!" });
+          response.status(401).json({ error: "Unauthorized: Token Invalid!" });
         } else {
-          // console.log("Sou o Decoded: ", decoded);
-          // // req.username = decoded; //Altera a requisição, colocando o username do Usuário
-          // const user = await User.findOne({ username: decoded }); //Procura se o usuário existe mesmo
-          // // req.user = user;
+          // console.log("Usuário Autenticado ", decoded);
+          const user = await UserModel.findOne({ username: decoded });
+          // if (user) {
+          //   request.user = user;
+          // }
+          // console.log("Meu Usuário: ", user);
           next();
         }
       });
     }
   } catch (error) {
     console.log("Erro ao verificar autenticação do usuário", error);
-    res.status(500).json({ error });
+    response.status(500).json({ error });
   }
 };
