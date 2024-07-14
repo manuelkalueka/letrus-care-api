@@ -11,6 +11,7 @@ export const createStudent = async (request: Request, response: Response) => {
     email,
     enrollmentDate,
     centerId,
+    gender,
   }: IStudent = request.body;
   const student: IStudent = new StudentModel({
     name,
@@ -21,6 +22,7 @@ export const createStudent = async (request: Request, response: Response) => {
     email,
     enrollmentDate,
     centerId,
+    gender,
   });
   try {
     await student.save();
@@ -82,6 +84,7 @@ export const editStudent = async (request: Request, response: Response) => {
     email,
     enrollmentDate,
     centerId,
+    gender,
   }: IStudent = request.body;
   try {
     const student = await StudentModel.findOneAndUpdate(
@@ -96,6 +99,7 @@ export const editStudent = async (request: Request, response: Response) => {
           email,
           enrollmentDate,
           centerId,
+          gender,
         },
       },
       { $upsert: true, new: true }

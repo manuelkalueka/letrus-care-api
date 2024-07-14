@@ -8,6 +8,8 @@ import { centerRouter } from "../src/routes/center-router";
 import { userRouter } from "./routes/user-router";
 import { withAuth } from "./middlewares/auth";
 import { studentRouter } from "./routes/student-router";
+import { courseRouter } from "./routes/course-router";
+import { enrollmentRouter } from "./routes/enrollment-route";
 
 const app: Application = express();
 
@@ -20,4 +22,6 @@ app.use(cookieParser());
 app.use("/centers", withAuth, centerRouter);
 app.use("/users", userRouter);
 app.use("/students", withAuth, studentRouter);
+app.use("/courses", withAuth, courseRouter);
+app.use("/enrollments", withAuth, enrollmentRouter)
 export default app;

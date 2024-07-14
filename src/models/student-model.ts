@@ -3,6 +3,7 @@ import { Schema, model, Document } from "mongoose";
 export interface IStudent extends Document {
   name: { fullName: string; surname?: string };
   birthDate: Date;
+  gender: "masculino" | "feminino";
   parents: { father: string; mother: string };
   address: string;
   phoneNumber: string;
@@ -16,6 +17,7 @@ export interface IStudent extends Document {
 const studentSchema = new Schema<IStudent>({
   name: { type: Object, required: true, unique: true },
   birthDate: { type: Date, required: true },
+  gender: { type: String, enum: ["masculino", "feminino"] },
   parents: { type: Object, required: true },
   address: { type: String, required: true },
   phoneNumber: { type: String, required: true },
