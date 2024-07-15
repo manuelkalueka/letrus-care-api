@@ -24,7 +24,7 @@ const centerSchema = new Schema<ICenter>({
     unique: true,
   },
   createdAt: { type: Date, default: Date.now },
-  documentCode: { type: String, required: true },
+  documentCode: { type: String, required: true, unique: true },
 });
 
 export const CenterModel = model<ICenter>("Center", centerSchema);
