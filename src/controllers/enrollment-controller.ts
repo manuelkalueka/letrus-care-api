@@ -5,14 +5,21 @@ export const createEnrollment = async (
   request: Request,
   response: Response
 ) => {
-  const { studentId, courseId, enrollmentDate, status, centerId }: IEnrollment =
-    request.body;
+  const {
+    studentId,
+    courseId,
+    enrollmentDate,
+    status,
+    centerId,
+    grade,
+  }: IEnrollment = request.body;
   const enrollment: IEnrollment = new EnrollmentModel({
     studentId,
     courseId,
     enrollmentDate,
     status,
     centerId,
+    grade,
   });
   try {
     await enrollment.save();
@@ -50,7 +57,7 @@ export const getEnrollment = async (request: Request, response: Response) => {
 
 export const editEnrollment = async (request: Request, response: Response) => {
   const { id } = request.params;
-  const { studentId, courseId, enrollmentDate, status }: IEnrollment =
+  const { studentId, courseId, enrollmentDate, status, grade }: IEnrollment =
     request.body;
   try {
     const enrollment = await EnrollmentModel.findOneAndUpdate(
@@ -61,6 +68,7 @@ export const editEnrollment = async (request: Request, response: Response) => {
           courseId,
           enrollmentDate,
           status,
+          grade,
         },
       },
       { $upsert: true, new: true }

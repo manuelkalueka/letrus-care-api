@@ -6,6 +6,7 @@ export interface IEnrollment extends Document {
   enrollmentDate: Date;
   status: "enrolled" | "completed" | "dropped";
   centerId: Schema.Types.ObjectId;
+  grade: Schema.Types.ObjectId | string;
 }
 
 const enrollmentSchema = new Schema<IEnrollment>({
@@ -18,6 +19,14 @@ const enrollmentSchema = new Schema<IEnrollment>({
     default: "enrolled",
   },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
+  grade: {
+    type: Schema.Types.ObjectId,
+    ref: "Center",
+    default: "não definido",
+  },
 });
 
-export const EnrollmentModel = model<IEnrollment>("Enrollment", enrollmentSchema);
+export const EnrollmentModel = model<IEnrollment>(
+  "Enrollment",
+  enrollmentSchema
+);
