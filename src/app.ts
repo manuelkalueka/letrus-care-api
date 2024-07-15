@@ -11,6 +11,7 @@ import { studentRouter } from "./routes/student-router";
 import { courseRouter } from "./routes/course-router";
 import { enrollmentRouter } from "./routes/enrollment-route";
 import { gradeRouter } from "./routes/grade-router";
+import { paymentRouter } from "./routes/payment-router";
 
 const app: Application = express();
 
@@ -26,4 +27,5 @@ app.use("/students", withAuth, studentRouter);
 app.use("/courses", withAuth, courseRouter);
 app.use("/enrollments", withAuth, enrollmentRouter);
 app.use("/grades", withAuth, gradeRouter);
+app.use("/payments", withAuth, paymentRouter)
 export default app;
