@@ -1,7 +1,12 @@
 {
   "name": "letrus-care-api",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "author": {
+    "name": "Pedro Manuel Kalueka",
+    "email": "pedrokalueca@gmail.com"
+  },
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
