@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { StudentModel, IStudent } from "../models/student-model";
+import { createCode } from "../utils/generate-code";
 
 export const createStudent = async (request: Request, response: Response) => {
   const {
@@ -13,6 +14,7 @@ export const createStudent = async (request: Request, response: Response) => {
     centerId,
     gender,
   }: IStudent = request.body;
+  const studentCode = await createCode(centerId, "S");
   const student: IStudent = new StudentModel({
     name,
     birthDate,
@@ -23,6 +25,7 @@ export const createStudent = async (request: Request, response: Response) => {
     enrollmentDate,
     centerId,
     gender,
+    studentCode,
   });
   try {
     await student.save();

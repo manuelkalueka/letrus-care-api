@@ -12,6 +12,7 @@ export interface IStudent extends Document {
   status: "active" | "inactive";
   centerId: Schema.Types.ObjectId;
   endDate: Date;
+  studentCode: string;
 }
 
 const studentSchema = new Schema<IStudent>({
@@ -26,6 +27,7 @@ const studentSchema = new Schema<IStudent>({
   endDate: { type: Date, default: null },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
+  studentCode: { type: String, required: true, unique: true },
 });
 
 export const StudentModel = model<IStudent>("Student", studentSchema);

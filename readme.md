@@ -14,6 +14,7 @@ Letrus Care é uma API de gestão de alunos projetado para centros de alfabetiza
 - **Gestão de Pagamentos de Mensalidades**
 - **Gestão de Notas e Pautas**
 - **Controle de Presença dos Estudantes**
+#### ToDo Gestão de Documentos, contribuições, eventos e calendário
 
 ## Tecnologias Utilizadas
 

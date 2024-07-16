@@ -4,9 +4,10 @@ import logger from "morgan";
 import cors from "cors";
 import "./config/database";
 
+import { withAuth } from "./middlewares/auth";
+
 import { centerRouter } from "../src/routes/center-router";
 import { userRouter } from "./routes/user-router";
-import { withAuth } from "./middlewares/auth";
 import { studentRouter } from "./routes/student-router";
 import { courseRouter } from "./routes/course-router";
 import { enrollmentRouter } from "./routes/enrollment-route";
@@ -14,6 +15,7 @@ import { gradeRouter } from "./routes/grade-router";
 import { paymentRouter } from "./routes/payment-router";
 import { classRouter } from "./routes/class-router";
 import { teacherRouter } from "./routes/teacher-router";
+import { attendanceRouter } from "./routes/attendance-router";
 
 const app: Application = express();
 
@@ -31,5 +33,6 @@ app.use("/enrollments", withAuth, enrollmentRouter);
 app.use("/grades", withAuth, gradeRouter);
 app.use("/payments", withAuth, paymentRouter);
 app.use("/classes", withAuth, classRouter);
-app.use("/teachers", withAuth, teacherRouter)
+app.use("/teachers", withAuth, teacherRouter);
+app.use("/attendances", withAuth, attendanceRouter);
 export default app;
