@@ -25,8 +25,9 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("/centers", withAuth, centerRouter);
+
 app.use("/users", userRouter);
+app.use("/centers", withAuth, centerRouter);
 app.use("/students", withAuth, studentRouter);
 app.use("/courses", withAuth, courseRouter);
 app.use("/enrollments", withAuth, enrollmentRouter);
@@ -35,4 +36,5 @@ app.use("/payments", withAuth, paymentRouter);
 app.use("/classes", withAuth, classRouter);
 app.use("/teachers", withAuth, teacherRouter);
 app.use("/attendances", withAuth, attendanceRouter);
+
 export default app;
