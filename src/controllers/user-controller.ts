@@ -5,7 +5,11 @@ import jwt from "jsonwebtoken";
 
 export const createUser = async (request: Request, response: Response) => {
   const { username, password, role } = request.body;
-  const user: IUser = new UserModel({ username, password, role });
+  const user: IUser = new UserModel({
+    username: username.toLowerCase(),
+    password,
+    role,
+  });
   try {
     await user.save();
     response.status(201).json(user);
