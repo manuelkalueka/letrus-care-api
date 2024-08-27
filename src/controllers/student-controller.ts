@@ -10,7 +10,6 @@ export const createStudent = async (request: Request, response: Response) => {
     address,
     phoneNumber,
     email,
-    enrollmentDate,
     centerId,
     gender,
   }: IStudent = request.body;
@@ -22,7 +21,6 @@ export const createStudent = async (request: Request, response: Response) => {
     address,
     phoneNumber,
     email,
-    enrollmentDate,
     centerId,
     gender,
     studentCode,
@@ -85,7 +83,6 @@ export const editStudent = async (request: Request, response: Response) => {
     address,
     phoneNumber,
     email,
-    enrollmentDate,
     centerId,
     gender,
   }: IStudent = request.body;
@@ -100,7 +97,6 @@ export const editStudent = async (request: Request, response: Response) => {
           address,
           phoneNumber,
           email,
-          enrollmentDate,
           centerId,
           gender,
         },
@@ -117,11 +113,11 @@ export const editStudent = async (request: Request, response: Response) => {
 
 export const deleteStudent = async (request: Request, response: Response) => {
   const { id } = request.params;
-  const endDate = Date.now();
+  const endStudiedDate = Date.now();
   try {
     await StudentModel.findOneAndUpdate(
       { _id: id },
-      { $set: { status: "inactive", endDate } },
+      { $set: { status: "inactive", endStudiedDate } },
       { $upsert: true, new: true }
     );
     response.status(204).json({ message: "success" });
