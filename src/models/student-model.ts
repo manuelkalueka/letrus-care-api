@@ -21,7 +21,7 @@ const studentSchema = new Schema<IStudent>({
   parents: { type: Object, required: true },
   address: { type: String, required: true },
   phoneNumber: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
   endStudiedDate: { type: Date, default: null },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
