@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../models/user-model";
+
 const secret = process.env.JWT_TOKEN;
 
 export const withAuth = async (
@@ -8,32 +9,53 @@ export const withAuth = async (
   response: Response,
   next: NextFunction
 ) => {
-  const token = request.headers.authorization; //Token esperando na requisicao
+  const tokenWithBearer = request.headers.authorization;
+
+  if (!tokenWithBearer || !tokenWithBearer.startsWith("Bearer ")) {
+    return response
+      .status(401)
+      .json({ message: "Token não fornecido ou mal formatado" });
+  }
+
+  const token = tokenWithBearer.replace("Bearer ", "");
+
+  if (!token) {
+    return response
+      .status(401)
+      .json({ error: "Unauthorized: no token provided" });
+  }
+
+  if (!secret) {
+    console.error("JWT secret not provided");
+    return response.status(500).json({ error: "Internal Server Error" });
+  }
+
   try {
-    if (!token) {
-      response.status(401).json({ error: "Unauthorized: no token provided" });
-    } else {
-      if (!secret) {
-        return;
+    jwt.verify(token, secret, async (err, decoded) => {
+      if (err) {
+        console.error("Token verification error:", err);
+        return response
+          .status(401)
+          .json({ error: "Unauthorized: Token Invalid!" });
       }
-      // Caso o token esteja presente vamos verificar se o token passado é válido
-      jwt.verify(token, secret, async (err, decoded) => {
-        if (err) {
-          console.log(err);
-          response.status(401).json({ error: "Unauthorized: Token Invalid!" });
-        } else {
-          // console.log("Usuário Autenticado ", decoded);
-          const user = await UserModel.findOne({ username: decoded });
-          // if (user) {
-          //   request.user = user;
-          // }
-          // console.log("Meu Usuário: ", user);
-          next();
+
+      try {
+        const user = await UserModel.findOne({ username: decoded });
+
+        if (!user) {
+          return response
+            .status(401)
+            .json({ error: "Unauthorized: User not found" });
         }
-      });
-    }
+        // request.user = user;
+        next();
+      } catch (err) {
+        console.error("Database error:", err);
+        return response.status(500).json({ error: "Internal Server Error" });
+      }
+    });
   } catch (error) {
-    console.log("Erro ao verificar autenticação do usuário", error);
-    response.status(500).json({ error });
+    console.error("Unexpected error during token verification:", error);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
