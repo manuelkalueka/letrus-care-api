@@ -25,6 +25,7 @@ export const createEnrollment = async (
     await enrollment.save();
     response.status(201).json(enrollment);
   } catch (error) {
+    console.log(error);
     response.status(500).json(error);
   }
 };
