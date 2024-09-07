@@ -6,9 +6,15 @@ import {
   getEnrollment,
   getEnrollments,
 } from "../controllers/enrollment-controller";
+import { uploadDisk } from "../config/multer";
 
 export const enrollmentRouter = Router();
-enrollmentRouter.post("/new", createEnrollment);
+const configUpload = uploadDisk.fields([
+  { name: "doc_file", maxCount: 1 },
+  { name: "image_file", maxCount: 1 },
+]);
+
+enrollmentRouter.post("/new", configUpload, createEnrollment);
 
 enrollmentRouter.get("/all/:status", getEnrollments);
 enrollmentRouter.get("/:id", getEnrollment);

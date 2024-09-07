@@ -7,6 +7,8 @@ export interface IEnrollment extends Document {
   status: "enrolled" | "completed" | "dropped";
   centerId: Schema.Types.ObjectId;
   grade: Schema.Types.ObjectId | string;
+  doc_file: string;
+  image_file: string;
 }
 
 const enrollmentSchema = new Schema<IEnrollment>({
@@ -24,6 +26,8 @@ const enrollmentSchema = new Schema<IEnrollment>({
     ref: "Center",
     default: "não definido",
   },
+  doc_file: { type: String },
+  image_file: { type: String },
 });
 
 export const EnrollmentModel = model<IEnrollment>(
