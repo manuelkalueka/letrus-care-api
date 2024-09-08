@@ -3,7 +3,7 @@ import { EnrollmentModel, IEnrollment } from "../models/enrollment-model";
 
 export const createEnrollment = async (
   request: Request,
-  response: Response
+  response: Response,
 ) => {
   const {
     studentId,
@@ -14,9 +14,9 @@ export const createEnrollment = async (
     grade,
   }: IEnrollment = request.body;
 
-  // Arquivos recebidos estão disponíveis em req.files as Express.Multer.File[]
-  const docFile = request.files.doc_file[0];
-  const imageFile = request.files.image_file[0];
+  // // Arquivos recebidos estão disponíveis em req.files as Express.Multer.File[]
+  // const docFile = request.files.doc_file[0];
+  // const imageFile = request.files.image_file[0];
 
   const enrollment: IEnrollment = new EnrollmentModel({
     studentId,
@@ -25,8 +25,8 @@ export const createEnrollment = async (
     status,
     centerId,
     grade,
-    docFile: docFile?.path, // Caminho do documento
-    image_file: imageFile?.path, // Caminho da imagem
+    // docFile: docFile?.path, // Caminho do documento
+    // image_file: imageFile?.path, // Caminho da imagem
   });
   try {
     await enrollment.save();

@@ -9,7 +9,7 @@ import {
 const gradeRouter = Router();
 
 gradeRouter.post("/new", createGrade);
-gradeRouter.get("/all", getGrades);
+gradeRouter.get("/all/:centerId", getGrades);
 gradeRouter.get("/:id", getGrade);
 gradeRouter.put("/edit/:id", editGrade);
 gradeRouter.delete("/delete/:id", deleteGrade);

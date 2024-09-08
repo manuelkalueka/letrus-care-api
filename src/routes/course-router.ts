@@ -11,7 +11,7 @@ import {
 export const courseRouter = Router();
 courseRouter.post("/new", createCourse);
 
-courseRouter.get("/all", getCourses);
+courseRouter.get("/all/:centerId", getCourses);
 courseRouter.get("/inactive", getInactiveCourses);
 courseRouter.get("/:id", getCourse);
 courseRouter.put("/edit/:id", editCourse);

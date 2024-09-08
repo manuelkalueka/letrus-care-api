@@ -18,7 +18,8 @@ export const createGrade = async (request: Request, response: Response) => {
 
 export const getGrades = async (request: Request, response: Response) => {
   try {
-    const grades = await GradeModel.find({}).sort({
+    const { centerId } = request.params;
+    const grades = await GradeModel.find({ centerId }).sort({
       grade: 1,
     });
     grades

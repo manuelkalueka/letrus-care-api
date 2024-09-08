@@ -30,9 +30,12 @@ export const createCourse = async (request: Request, response: Response) => {
 
 export const getCourses = async (request: Request, response: Response) => {
   try {
-    const courses = await CourseModel.find({ status: "active" }).sort({
-      name: 1,
-    });
+    const { centerId } = request.params;
+    const courses = await CourseModel.find({ status: "active", centerId }).sort(
+      {
+        name: 1,
+      }
+    );
     courses
       ? response.status(200).json(courses)
       : response.status(404).json(null);
