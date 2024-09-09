@@ -131,3 +131,6 @@ dist
 
 # Debug
 .vscode
+# Production
+uploads/
+uploads/docs

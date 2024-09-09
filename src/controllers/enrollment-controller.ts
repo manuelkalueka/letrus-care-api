@@ -15,8 +15,6 @@ export const createEnrollment = async (
     userId,
   }: IEnrollment = request.body;
 
-  console.log(request.files);
-
   const enrollment: IEnrollment = new EnrollmentModel({
     studentId,
     courseId,
@@ -25,8 +23,8 @@ export const createEnrollment = async (
     centerId,
     grade,
     userId,
-    // docFile: docFile?.path, // Caminho do documento
-    // image_file: imageFile?.path, // Caminho da imagem
+    // docFile: docFile,
+    // image_file: imageFile,
   });
   try {
     await enrollment.save();
