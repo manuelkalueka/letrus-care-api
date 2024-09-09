@@ -6,9 +6,10 @@ export interface IEnrollment extends Document {
   enrollmentDate: Date;
   status: "enrolled" | "completed" | "dropped";
   centerId: Schema.Types.ObjectId;
-  grade: Schema.Types.ObjectId | string;
+  grade: Schema.Types.ObjectId;
   doc_file: string;
   image_file: string;
+  userId: Schema.Types.ObjectId;
 }
 
 const enrollmentSchema = new Schema<IEnrollment>({
@@ -21,10 +22,11 @@ const enrollmentSchema = new Schema<IEnrollment>({
     default: "enrolled",
   },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   grade: {
     type: Schema.Types.ObjectId,
-    ref: "Center",
-    default: "não definido",
+    ref: "Grade",
+    required: true,
   },
   doc_file: { type: String },
   image_file: { type: String },

@@ -12,11 +12,10 @@ export const createEnrollment = async (
     status,
     centerId,
     grade,
+    userId,
   }: IEnrollment = request.body;
 
-  // Arquivos recebidos estão disponíveis em req.files as Express.Multer.File[]
-  const docFile = request.files.doc_file[0];
-  const imageFile = request.files.image_file[0];
+  console.log(request.files);
 
   const enrollment: IEnrollment = new EnrollmentModel({
     studentId,
@@ -25,8 +24,9 @@ export const createEnrollment = async (
     status,
     centerId,
     grade,
-    docFile: docFile?.path, // Caminho do documento
-    image_file: imageFile?.path, // Caminho da imagem
+    userId,
+    // docFile: docFile?.path, // Caminho do documento
+    // image_file: imageFile?.path, // Caminho da imagem
   });
   try {
     await enrollment.save();
@@ -38,11 +38,15 @@ export const createEnrollment = async (
 };
 
 export const getEnrollments = async (request: Request, response: Response) => {
-  const { status } = request.params;
   try {
-    const enrollments = await EnrollmentModel.find({ status }).sort({
-      enrollmentDate: -1,
-    });
+    const { centerId } = request.params;
+    const enrollments = await EnrollmentModel.find({ centerId })
+      .populate("studentId")
+      .populate({ path: "courseId", select: "name" })
+      .populate({ path: "grade", select: "grade" })
+      .sort({
+        enrollmentDate: -1,
+      });
     enrollments
       ? response.status(200).json(enrollments)
       : response.status(404).json(null);

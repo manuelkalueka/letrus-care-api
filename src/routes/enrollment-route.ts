@@ -15,8 +15,7 @@ const configUpload = uploadDisk.fields([
 ]);
 
 enrollmentRouter.post("/new", configUpload, createEnrollment);
-
-enrollmentRouter.get("/all/:status", getEnrollments);
+enrollmentRouter.get("/all/:centerId", getEnrollments);
 enrollmentRouter.get("/:id", getEnrollment);
 enrollmentRouter.put("/edit/:id", editEnrollment);
 enrollmentRouter.delete("/delete/:id", deleteEnrollment);
