@@ -34,6 +34,21 @@ export const getCenter = async (request: Request, response: Response) => {
   }
 };
 
+export const getCenterByCreateBy = async (
+  request: Request,
+  response: Response
+) => {
+  const { createdBy } = request.params;
+  try {
+    const center = await CenterModel.findOne({ createdBy });
+    center
+      ? response.status(200).json(center)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
 export const editCenter = async (request: Request, response: Response) => {
   const { id } = request.params;
   const { name, address, phoneNumber, email, documentCode } = request.body;
