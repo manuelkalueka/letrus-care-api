@@ -26,6 +26,7 @@ export const createEnrollment = async (
     status,
     centerId,
     grade,
+    userId
     // docFile: docFile?.path, // Caminho do documento
     // image_file: imageFile?.path, // Caminho da imagem
   });
