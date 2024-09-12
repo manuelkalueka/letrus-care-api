@@ -9,6 +9,7 @@ export interface ICenter extends Document {
   createdAt: Date;
   documentCode: string;
   createdBy: Schema.Types.ObjectId;
+  logo?: string;
 }
 
 const centerSchema = new Schema<ICenter>({
