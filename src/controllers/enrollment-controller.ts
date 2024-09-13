@@ -3,7 +3,7 @@ import { EnrollmentModel, IEnrollment } from "../models/enrollment-model";
 
 export const createEnrollment = async (
   request: Request,
-  response: Response,
+  response: Response
 ) => {
   const {
     studentId,
@@ -26,7 +26,7 @@ export const createEnrollment = async (
     status,
     centerId,
     grade,
-    userId
+    userId,
     // docFile: docFile?.path, // Caminho do documento
     // image_file: imageFile?.path, // Caminho da imagem
   });
@@ -60,7 +60,10 @@ export const getEnrollments = async (request: Request, response: Response) => {
 export const getEnrollment = async (request: Request, response: Response) => {
   const { id } = request.params;
   try {
-    const enrollment = await EnrollmentModel.findById(id);
+    const enrollment = await EnrollmentModel.findById(id)
+      .populate("studentId")
+      .populate({ path: "courseId", select: "name" })
+      .populate({ path: "grade", select: "grade" });
     enrollment
       ? response.status(200).json(enrollment)
       : response.status(404).json(null);
