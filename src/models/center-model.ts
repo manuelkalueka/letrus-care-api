@@ -9,7 +9,8 @@ export interface ICenter extends Document {
   createdAt: Date;
   documentCode: string;
   createdBy: Schema.Types.ObjectId;
-  logo?: string;
+  fileType?: String;
+  fileData?: String;
 }
 
 const centerSchema = new Schema<ICenter>({
@@ -26,6 +27,8 @@ const centerSchema = new Schema<ICenter>({
   },
   createdAt: { type: Date, default: Date.now },
   documentCode: { type: String, required: true, unique: true },
+  fileType: String,
+  fileData: String,
 });
 
 export const CenterModel = model<ICenter>("Center", centerSchema);

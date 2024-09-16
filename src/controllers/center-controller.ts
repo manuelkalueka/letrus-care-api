@@ -52,10 +52,19 @@ export const getCenterByCreateBy = async (
 export const editCenter = async (request: Request, response: Response) => {
   const { id } = request.params;
   const { name, address, phoneNumber, email, documentCode } = request.body;
+
   try {
     const centerForUpdate = await CenterModel.findOneAndUpdate(
       { _id: id },
-      { $set: { name, address, phoneNumber, email, documentCode } },
+      {
+        $set: {
+          name,
+          address,
+          phoneNumber,
+          email,
+          documentCode,
+        },
+      },
       { $upsert: true, new: true }
     );
 

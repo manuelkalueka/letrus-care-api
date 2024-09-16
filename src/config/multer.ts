@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 
 // Configuração de armazenamento
+const storage = multer.memoryStorage();
 const storageDisk = multer.diskStorage({
   destination: function (req, file, cb) {
     // Salva os arquivos na pasta "uploads/docs"
@@ -35,9 +36,18 @@ const fileFilter = (req: any, file: any, cb: any) => {
   }
 };
 
+const fileConfig = {
+  limits: { fileSize: 1000000 }, // Limite de 1MB
+  fileFilter: fileFilter,
+};
+
 // Configuração de upload com limite de tamanho e validação de tipo de arquivo
 export const uploadDisk = multer({
   storage: storageDisk,
-  limits: { fileSize: 1000000 }, // Limite de 1MB
-  fileFilter: fileFilter,
+  ...fileConfig,
+});
+
+export const upload = multer({
+  storage,
+  ...fileConfig,
 });
