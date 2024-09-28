@@ -6,10 +6,13 @@ config();
 
 main()
   .then(() => console.log("Conectado a Base de Dados com sucesso!"))
-  .catch((err) => console.log(err));
+  .catch((err) => console.error("Erro na conexão com a DB:", err));
 
 async function main() {
   await mongoose.connect(
-    `${process.env.CONNECTION_STRING}/${process.env.DB_NAME}`
+    `${process.env.CONNECTION_STRING}${process.env.DB_NAME}`,
+    {
+      serverSelectionTimeoutMS: 5000, // 5 segundos de timeout
+    }
   );
 }
