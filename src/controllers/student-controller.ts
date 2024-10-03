@@ -74,6 +74,21 @@ export const getStudent = async (request: Request, response: Response) => {
   }
 };
 
+export const searchStudent = async (request: Request, response: Response) => {
+  const { query } = request.query as string;
+  const { centerId } = request.params;
+  try {
+    const student = await StudentModel.find({ centerId }).find({
+      $text: { $search: query },
+    });
+    student
+      ? response.status(200).json(student)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
 export const editStudent = async (request: Request, response: Response) => {
   const { id } = request.params;
   const {

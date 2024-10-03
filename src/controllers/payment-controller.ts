@@ -2,20 +2,27 @@ import { Request, Response } from "express";
 import { PaymentModel, IPayment } from "../models/payment-model";
 
 export const createPayment = async (request: Request, response: Response) => {
-  const { studentId, amount, paymentDate, paymentMonthReference, centerId } =
-    request.body;
-
-  // Verificação dos campos obrigatórios
-  if (!studentId || !amount || !paymentMonthReference || !centerId) {
-    return response.status(400).json({ error: "Campos obrigatórios faltando" });
-  }
-
-  const payment: IPayment = new PaymentModel({
-    studentId,
+  const {
+    enrollmentId,
     amount,
     paymentDate,
     paymentMonthReference,
     centerId,
+    user,
+  } = request.body;
+
+  // Verificação dos campos obrigatórios
+  if (!enrollmentId || !amount || !paymentMonthReference || !centerId) {
+    return response.status(400).json({ error: "Campos obrigatórios faltando" });
+  }
+
+  const payment: IPayment = new PaymentModel({
+    enrollmentId,
+    amount,
+    paymentDate,
+    paymentMonthReference,
+    centerId,
+    user,
   });
 
   try {
@@ -71,7 +78,7 @@ export const getPayment = async (request: Request, response: Response) => {
 export const editPayment = async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const { studentId, amount, paymentDate, paymentMonthReference, centerId } =
+  const { enrollmentId, amount, paymentDate, paymentMonthReference, centerId } =
     request.body;
   try {
     // Verificação dos campos obrigatórios
