@@ -11,7 +11,6 @@ export interface ITeacher extends Document {
   centerId: Schema.Types.ObjectId;
   user: Schema.Types.ObjectId;
   course: Schema.Types.ObjectId;
-  subject: string;
   teacherCode: string;
 }
 
@@ -19,7 +18,7 @@ const teacherSchema = new Schema<ITeacher>({
   fullName: { type: String, required: true, unique: true },
   birthDate: { type: Date, required: true },
   address: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
+  phoneNumber: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   hireDate: { type: Date, default: Date.now },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
@@ -28,10 +27,8 @@ const teacherSchema = new Schema<ITeacher>({
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
-    unique: true,
   },
   course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
-  subject: { type: String, required: true },
   teacherCode: { type: String, required: true, unique: true },
 });
 
