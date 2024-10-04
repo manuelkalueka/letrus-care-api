@@ -75,17 +75,33 @@ export const getStudent = async (request: Request, response: Response) => {
 };
 
 export const searchStudent = async (request: Request, response: Response) => {
-  const { query } = request.query as string;
+  const { query } = request.query;
   const { centerId } = request.params;
+
   try {
-    const student = await StudentModel.find({ centerId }).find({
+    // Garantir que o valor de query seja uma string
+    if (typeof query !== "string") {
+      return response
+        .status(400)
+        .json({ message: "Query string precisa ser string." });
+    }
+
+    // Buscar estudantes com base no $text search
+    const student = await StudentModel.find({ centerId }).findOne({
       $text: { $search: query },
     });
-    student
-      ? response.status(200).json(student)
-      : response.status(404).json(null);
+
+    // Retornar o estudante se encontrado ou 404 se não encontrado
+    if (student) {
+      return response.status(200).json(student);
+    } else {
+      return response
+        .status(404)
+        .json({ message: "Estudante não encontrado." });
+    }
   } catch (error) {
-    response.status(500).json(error);
+    // Tratar qualquer erro que ocorrer durante a busca
+    return response.status(500).json({ message: "Server error", error });
   }
 };
 
