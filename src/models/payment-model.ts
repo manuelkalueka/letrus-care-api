@@ -5,6 +5,7 @@ export interface IPayment extends Document {
   amount: number;
   paymentDate: Date;
   paymentMonthReference: string;
+  paymentYearReference: number;
   dueDate: Date;
   status: "paid" | "pending" | "overdue";
   centerId: Schema.Types.ObjectId;
@@ -16,6 +17,7 @@ const paymentSchema = new Schema<IPayment>({
   amount: { type: Number, required: true },
   paymentDate: { type: Date, default: Date.now },
   paymentMonthReference: { type: String, required: true },
+  paymentYearReference: { type: Number, required: true },
   dueDate: { type: Date },
   status: {
     type: String,

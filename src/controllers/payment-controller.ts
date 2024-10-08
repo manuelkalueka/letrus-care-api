@@ -7,6 +7,7 @@ export const createPayment = async (request: Request, response: Response) => {
     amount,
     paymentDate,
     paymentMonthReference,
+    paymentYearReference,
     centerId,
     user,
   } = request.body;
@@ -21,6 +22,7 @@ export const createPayment = async (request: Request, response: Response) => {
     amount,
     paymentDate,
     paymentMonthReference,
+    paymentYearReference,
     centerId,
     user,
   });
