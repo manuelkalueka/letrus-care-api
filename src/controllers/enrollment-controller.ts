@@ -78,7 +78,7 @@ export const getEnrollmentByStudentId = async (
   const { studentId } = request.params;
   try {
     const enrollment = await EnrollmentModel.findOne({ studentId })
-      .populate({ path: "courseId", select: "name" })
+      .populate("courseId")
       .populate({ path: "grade", select: "grade" });
     enrollment
       ? response.status(200).json(enrollment)
