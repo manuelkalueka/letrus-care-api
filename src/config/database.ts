@@ -11,8 +11,5 @@ main()
 async function main() {
   await mongoose.connect(
     `${process.env.CONNECTION_STRING}${process.env.DB_NAME}`,
-    {
-      serverSelectionTimeoutMS: 5000, // 5 segundos de timeout
-    }
   );
 }
