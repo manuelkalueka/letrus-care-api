@@ -71,6 +71,22 @@ export const getEnrollment = async (request: Request, response: Response) => {
     response.status(500).json(error);
   }
 };
+export const getEnrollmentByStudentId = async (
+  request: Request,
+  response: Response
+) => {
+  const { studentId } = request.params;
+  try {
+    const enrollment = await EnrollmentModel.findOne({ studentId })
+      .populate("courseId")
+      .populate({ path: "grade", select: "grade" });
+    enrollment
+      ? response.status(200).json(enrollment)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
 
 export const editEnrollment = async (request: Request, response: Response) => {
   const { id } = request.params;

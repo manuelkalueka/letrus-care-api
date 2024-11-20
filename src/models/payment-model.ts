@@ -1,20 +1,23 @@
 import { Schema, model, Document } from "mongoose";
 
 export interface IPayment extends Document {
-  studentId: Schema.Types.ObjectId;
+  enrollmentId: Schema.Types.ObjectId;
   amount: number;
   paymentDate: Date;
   paymentMonthReference: string;
+  paymentYearReference: number;
   dueDate: Date;
   status: "paid" | "pending" | "overdue";
   centerId: Schema.Types.ObjectId;
+  user: Schema.Types.ObjectId;
 }
 
 const paymentSchema = new Schema<IPayment>({
-  studentId: { type: Schema.Types.ObjectId, ref: "Student", required: true },
+  enrollmentId: { type: Schema.Types.ObjectId, ref: "Student", required: true },
   amount: { type: Number, required: true },
   paymentDate: { type: Date, default: Date.now },
   paymentMonthReference: { type: String, required: true },
+  paymentYearReference: { type: Number, required: true },
   dueDate: { type: Date },
   status: {
     type: String,
@@ -22,6 +25,7 @@ const paymentSchema = new Schema<IPayment>({
     default: "pending",
   },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 // Hook para marcar a data de expiração do pagamento um mês após a data de pagamento

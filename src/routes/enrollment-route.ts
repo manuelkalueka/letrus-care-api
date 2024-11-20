@@ -4,6 +4,7 @@ import {
   deleteEnrollment,
   editEnrollment,
   getEnrollment,
+  getEnrollmentByStudentId,
   getEnrollments,
 } from "../controllers/enrollment-controller";
 import { uploadDisk } from "../config/multer";
@@ -17,5 +18,6 @@ const configUpload = uploadDisk.fields([
 enrollmentRouter.post("/new", configUpload, createEnrollment);
 enrollmentRouter.get("/all/:centerId", getEnrollments);
 enrollmentRouter.get("/:id", getEnrollment);
+enrollmentRouter.get("/student/:studentId", getEnrollmentByStudentId);
 enrollmentRouter.put("/edit/:id", editEnrollment);
 enrollmentRouter.delete("/delete/:id", deleteEnrollment);
