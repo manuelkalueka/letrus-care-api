@@ -10,7 +10,7 @@ export interface ITeacher extends Document {
   status: "active" | "inactive";
   centerId: Schema.Types.ObjectId;
   user: Schema.Types.ObjectId;
-  course: Schema.Types.ObjectId;
+  courses: Schema.Types.ObjectId[];
   teacherCode: string;
 }
 
@@ -28,7 +28,7 @@ const teacherSchema = new Schema<ITeacher>({
     ref: "User",
     required: true,
   },
-  course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
+  courses: { type: [], ref: "Course", required: true },
   teacherCode: { type: String, required: true, unique: true },
 });
 

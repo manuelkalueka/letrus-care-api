@@ -13,7 +13,7 @@ export const createTeacher = async (request: Request, response: Response) => {
     status,
     centerId,
     user,
-    course,
+    courses,
   }: ITeacher = request.body;
 
   const teacherCode = await createCode(centerId, "T");
@@ -27,7 +27,7 @@ export const createTeacher = async (request: Request, response: Response) => {
     status,
     centerId,
     user,
-    course,
+    courses,
     teacherCode,
   });
   try {
@@ -47,7 +47,7 @@ export const getTeachers = async (request: Request, response: Response) => {
       .sort({
         fullName: 1,
       })
-      .populate("course");
+      .populate("courses");
     teachers
       ? response.status(200).json(teachers)
       : response.status(404).json(null);
@@ -77,7 +77,7 @@ export const editTeacher = async (request: Request, response: Response) => {
     phoneNumber,
     email,
     hireDate,
-    course,
+    courses,
   }: ITeacher = request.body;
   try {
     const teacher = await TeacherModel.findOneAndUpdate(
@@ -90,7 +90,7 @@ export const editTeacher = async (request: Request, response: Response) => {
           phoneNumber,
           email,
           hireDate,
-          course,
+          courses,
         },
       },
       { $upsert: true, new: true }
