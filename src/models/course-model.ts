@@ -6,6 +6,7 @@ export interface ICourse extends Document {
   startDate: Date;
   endDate: Date;
   fee: number;
+  feeFine: number;
   centerId: Schema.Types.ObjectId;
   status: "active" | "inactive";
 }
@@ -16,6 +17,7 @@ const courseSchema = new Schema<ICourse>({
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   fee: { type: Number, required: true },
+  feeFine: { type: Number, required: true },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
 });
