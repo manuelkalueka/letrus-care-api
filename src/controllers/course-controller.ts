@@ -11,6 +11,7 @@ export const createCourse = async (request: Request, response: Response) => {
     centerId,
     status,
     feeFine,
+    courseType,
   }: ICourse = request.body;
   const course: ICourse = new CourseModel({
     name,
@@ -21,6 +22,7 @@ export const createCourse = async (request: Request, response: Response) => {
     centerId,
     status,
     feeFine,
+    courseType,
   });
   try {
     await course.save();
@@ -76,8 +78,15 @@ export const getCourse = async (request: Request, response: Response) => {
 
 export const editCourse = async (request: Request, response: Response) => {
   const { id } = request.params;
-  const { name, description, startDate, endDate, fee, feeFine }: ICourse =
-    request.body;
+  const {
+    name,
+    description,
+    startDate,
+    endDate,
+    fee,
+    feeFine,
+    courseType,
+  }: ICourse = request.body;
   try {
     const course = await CourseModel.findOneAndUpdate(
       { _id: id },
@@ -89,6 +98,7 @@ export const editCourse = async (request: Request, response: Response) => {
           endDate,
           fee,
           feeFine,
+          courseType,
         },
       },
       { $upsert: true, new: true }
