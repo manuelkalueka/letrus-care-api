@@ -35,6 +35,10 @@ const studentSchema = new Schema<IStudent>({
 });
 
 // criação de índice de texto
-studentSchema.index({ "name.fullName": "text", studentCode: "text" });
+studentSchema.index({
+  "name.fullName": "text",
+  studentCode: "text",
+  "name.surname": "text",
+});
 
 export const StudentModel = model<IStudent>("Student", studentSchema);
