@@ -8,8 +8,9 @@ export const createPayment = async (request: Request, response: Response) => {
     paymentDate,
     paymentMonthReference,
     paymentYearReference,
+    paymentMethod,
     centerId,
-    user,
+    userId,
   } = request.body;
 
   // Verificação dos campos obrigatórios
@@ -23,8 +24,9 @@ export const createPayment = async (request: Request, response: Response) => {
     paymentDate,
     paymentMonthReference,
     paymentYearReference,
+    paymentMethod,
     centerId,
-    user,
+    userId,
   });
 
   try {
@@ -80,7 +82,7 @@ export const getPayment = async (request: Request, response: Response) => {
 export const editPayment = async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const { enrollmentId, amount, paymentDate, paymentMonthReference, centerId } =
+  const { paymentMethod, amount, paymentDate, paymentMonthReference } =
     request.body;
   try {
     // Verificação dos campos obrigatórios
@@ -96,6 +98,7 @@ export const editPayment = async (request: Request, response: Response) => {
           amount,
           paymentDate,
           paymentMonthReference,
+          paymentMethod
         },
       },
       { $upsert: true, new: true }

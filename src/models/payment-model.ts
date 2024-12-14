@@ -6,10 +6,14 @@ export interface IPayment extends Document {
   paymentDate: Date;
   paymentMonthReference: string;
   paymentYearReference: number;
+  paymentMethod:
+    | "Dinheiro"
+    | "Multicaixa Express"
+    | "Transferência Bancária (ATM)";
   dueDate: Date;
   status: "paid" | "pending" | "overdue";
   centerId: Schema.Types.ObjectId;
-  user: Schema.Types.ObjectId;
+  userId: Schema.Types.ObjectId;
 }
 
 const paymentSchema = new Schema<IPayment>({
@@ -24,8 +28,13 @@ const paymentSchema = new Schema<IPayment>({
     enum: ["paid", "pending", "overdue"],
     default: "pending",
   },
+  paymentMethod: {
+    type: String,
+    enum: ["Dinheiro", "Multicaixa Express", "Transferência Bancária (ATM)"],
+    default: "Dinheiro",
+  },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 // Hook para marcar a data de expiração do pagamento um mês após a data de pagamento
