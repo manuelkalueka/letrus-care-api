@@ -6,6 +6,7 @@ export interface IUser extends Document {
   password: string;
   role: "admin" | "teacher" | "student";
   createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>({
@@ -17,6 +18,7 @@ const userSchema = new Schema<IUser>({
     default: "admin",
   },
   createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
 // hook para hash de senha antes de salvar
