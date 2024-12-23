@@ -77,3 +77,53 @@ export const editCenter = async (request: Request, response: Response) => {
     response.status(500).json(error);
   }
 };
+
+export const addLogoInCenter = async (request: Request, response: Response) => {
+  try {
+    const { centerId } = request.params;
+    // Verifica se o arquivo foi enviado
+    if (!request.file) {
+      return response.status(400).json({ message: "Nenhum arquivo enviado" });
+    }
+
+    // Converte o buffer do arquivo para Base64
+    const fileData = request.file.buffer.toString("base64");
+    const fileType = request.file.mimetype;
+
+    const centerForUpdate = await CenterModel.findOneAndUpdate(
+      { _id: centerId },
+      {
+        $set: {
+          fileData,
+          fileType,
+        },
+      },
+      { $upsert: true, new: true }
+    ).select(["fileData", "fileType, documentCode"]);
+    if (!centerForUpdate) {
+      return response
+        .status(404)
+        .json({ message: "centro não encontrado", center: null });
+    } else {
+      // Buscar o título do projeto associado
+      const logoTitle = `logo_${centerForUpdate.documentCode}`;
+      const logoData = centerForUpdate?.fileData;
+
+      // Convertendo o dado base64 para buffer
+      if (logoData) {
+        const buffer = Buffer.from(logoData, "base64");
+        response.set({
+          "Content-Type": centerForUpdate.fileType,
+          "Content-Disposition": `attachment; filename="${logoTitle}.${
+            centerForUpdate.fileType?.split("/")[1]
+          }"`,
+        });
+
+        // Enviando o buffer do áudio
+        response.send(buffer);
+      }
+    }
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};

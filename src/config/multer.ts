@@ -3,6 +3,7 @@ import path from "path";
 
 // Configuração de armazenamento
 const storage = multer.memoryStorage();
+
 const storageDisk = multer.diskStorage({
   destination: function (req, file, cb) {
     // Salva os arquivos na pasta "uploads/docs"

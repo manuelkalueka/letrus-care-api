@@ -40,9 +40,12 @@ export const createPayment = async (request: Request, response: Response) => {
 
 export const getPayments = async (request: Request, response: Response) => {
   try {
-    const payments = await PaymentModel.find({}).sort({
-      dueDate: -1,
-    });
+    const { centerId } = request.params;
+    const payments = await PaymentModel.find({ centerId })
+      .sort({
+        dueDate: -1,
+      })
+      .populate("enrollmentId");
     payments
       ? response.status(200).json(payments)
       : response.status(404).json(null);
@@ -98,7 +101,7 @@ export const editPayment = async (request: Request, response: Response) => {
           amount,
           paymentDate,
           paymentMonthReference,
-          paymentMethod
+          paymentMethod,
         },
       },
       { $upsert: true, new: true }

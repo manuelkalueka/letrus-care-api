@@ -8,7 +8,7 @@ import {
 } from "../controllers/payment-controller";
 const paymentRouter = Router();
 
-paymentRouter.get("/all", getPayments);
+paymentRouter.get("/all/:centerId", getPayments);
 paymentRouter.post("/new", createPayment);
 paymentRouter.get("/:id", getPayment);
 paymentRouter.put("/edit/:id", editPayment);
