@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../models/user-model";
 
 const secret = process.env.JWT_TOKEN;
 
-export const withAuth = async (
+export const withAuth: RequestHandler = async (
   request: Request,
   response: Response,
   next: NextFunction
