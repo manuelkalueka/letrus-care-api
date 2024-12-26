@@ -45,7 +45,12 @@ export const getPayments = async (request: Request, response: Response) => {
       .sort({
         dueDate: -1,
       })
-      .populate("enrollmentId");
+      .populate({
+        path: "enrollmentId",
+        populate: {
+          path: "studentId",
+        },
+      });
     payments
       ? response.status(200).json(payments)
       : response.status(404).json(null);

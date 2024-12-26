@@ -17,7 +17,11 @@ export interface IPayment extends Document {
 }
 
 const paymentSchema = new Schema<IPayment>({
-  enrollmentId: { type: Schema.Types.ObjectId, ref: "Student", required: true },
+  enrollmentId: {
+    type: Schema.Types.ObjectId,
+    ref: "Enrollment",
+    required: true,
+  },
   amount: { type: Number, required: true },
   paymentDate: { type: Date, default: Date.now },
   paymentMonthReference: { type: String, required: true },
