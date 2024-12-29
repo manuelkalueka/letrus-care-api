@@ -5,11 +5,11 @@ import { config } from "dotenv";
 config();
 
 main()
-  .then(() => console.log("Conectado a Base de Dados com sucesso!"))
-  .catch((err) => console.error("Erro na conexão com a DB:", err));
+  .then(() => console.log("Conexão com o MongoDB estabelecida com sucesso!"))
+  .catch((error) => console.error("Erro ao conectar ao MongoDB:", error));
 
-async function main() {
+async function main(): Promise<void> {
   await mongoose.connect(
-    `${process.env.CONNECTION_STRING}${process.env.DB_NAME}`,
+    `${process.env.CONNECTION_STRING}${process.env.DB_NAME}`
   );
 }
