@@ -10,6 +10,8 @@ export interface IClass extends Document {
   center: Schema.Types.ObjectId;
   classLimit: number;
   status: "active" | "inactive";
+  userId: Schema.Types.ObjectId;
+  schedule: string;
 }
 
 const classSchema = new Schema<IClass>({
@@ -26,6 +28,8 @@ const classSchema = new Schema<IClass>({
   center: { type: Schema.Types.ObjectId, ref: "Center", required: true },
   classLimit: { type: Number, default: 20 },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  schedule: { type: String, required: true },
 });
 
 export const ClassModel = model<IClass>("Class", classSchema);

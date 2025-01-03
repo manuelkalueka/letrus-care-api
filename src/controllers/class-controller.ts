@@ -2,8 +2,17 @@ import { Request, Response } from "express";
 import { ClassModel, IClass } from "../models/class-model";
 
 export const createClass = async (request: Request, response: Response) => {
-  const { course, period, students, teachers, className, center, classLimit } =
-    request.body;
+  const {
+    course,
+    period,
+    students,
+    teachers,
+    className,
+    center,
+    classLimit,
+    userId,
+    schedule,
+  } = request.body;
 
   const classInCenter: IClass = new ClassModel({
     course,
@@ -13,6 +22,8 @@ export const createClass = async (request: Request, response: Response) => {
     className,
     center,
     classLimit,
+    schedule,
+    userId,
   });
 
   try {
@@ -26,8 +37,12 @@ export const createClass = async (request: Request, response: Response) => {
 
 export const getClasses = async (request: Request, response: Response) => {
   const { status } = request.query;
+  const { centerId } = request.params;
   try {
-    const classesInCenter = await ClassModel.find({ status }).sort({
+    const classesInCenter = await ClassModel.find({
+      status,
+      center: centerId,
+    }).sort({
       className: 1,
     });
     classesInCenter
@@ -53,7 +68,7 @@ export const getClass = async (request: Request, response: Response) => {
 export const editClass = async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const { period, students, teachers, classLimit } = request.body;
+  const { period, students, teachers, classLimit, schedule } = request.body;
   try {
     const classInCenter = await ClassModel.findOneAndUpdate(
       { _id: id },
@@ -63,6 +78,7 @@ export const editClass = async (request: Request, response: Response) => {
           students,
           teachers,
           classLimit,
+          schedule,
         },
       },
       { $upsert: true, new: true }
