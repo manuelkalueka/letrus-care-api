@@ -3,7 +3,7 @@ import { Schema, model, Document } from "mongoose";
 export interface IClass extends Document {
   course: Schema.Types.ObjectId;
   period: "morning" | "moon" | "evening";
-  grade: Schema.Types.ObjectId[];
+  grade: Schema.Types.ObjectId;
   students: Schema.Types.ObjectId[];
   teachers: Schema.Types.ObjectId[];
   className: string;
@@ -23,7 +23,7 @@ const classSchema = new Schema<IClass>({
   },
   students: [{ type: Schema.Types.ObjectId, ref: "Student" }],
   teachers: [{ type: Schema.Types.ObjectId, ref: "Teacher", required: true }],
-  grade: [{ type: Schema.Types.ObjectId, ref: "Grade", required: true }],
+  grade: { type: Schema.Types.ObjectId, ref: "Grade", required: true },
   className: { type: String, required: true, unique: true },
   center: { type: Schema.Types.ObjectId, ref: "Center", required: true },
   classLimit: { type: Number, default: 20 },

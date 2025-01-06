@@ -12,6 +12,7 @@ export const createClass = async (request: Request, response: Response) => {
     classLimit,
     userId,
     schedule,
+    grade,
   } = request.body;
 
   const classInCenter: IClass = new ClassModel({
@@ -24,6 +25,7 @@ export const createClass = async (request: Request, response: Response) => {
     classLimit,
     schedule,
     userId,
+    grade,
   });
 
   try {
@@ -36,15 +38,16 @@ export const createClass = async (request: Request, response: Response) => {
 };
 
 export const getClasses = async (request: Request, response: Response) => {
-  const { status } = request.query;
   const { centerId } = request.params;
   try {
     const classesInCenter = await ClassModel.find({
-      status,
       center: centerId,
-    }).sort({
-      className: 1,
-    });
+    })
+      .sort({
+        className: 1,
+      })
+      .populate({ path: "grade", select: "grade" })
+      .populate({ path: "course", select: "name" });
     classesInCenter
       ? response.status(200).json(classesInCenter)
       : response.status(404).json(null);

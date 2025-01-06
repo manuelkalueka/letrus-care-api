@@ -41,8 +41,17 @@ export const createEnrollment = async (
 
 export const getEnrollments = async (request: Request, response: Response) => {
   try {
+    const page = parseInt(request.query.page as string) || 1;
+    const limit = 5;
+    const skip = (page - 1) * limit;
+
     const { centerId } = request.params;
+
+    const totalEnrollments = await EnrollmentModel.countDocuments({ centerId });
+
     const enrollments = await EnrollmentModel.find({ centerId })
+      .skip(skip)
+      .limit(limit)
       .populate("studentId")
       .populate({ path: "courseId", select: "name" })
       .populate({ path: "grade", select: "grade" })
@@ -50,7 +59,12 @@ export const getEnrollments = async (request: Request, response: Response) => {
         enrollmentDate: -1,
       });
     enrollments
-      ? response.status(200).json(enrollments)
+      ? response
+          .status(200)
+          .json({
+            enrollments,
+            totalEnrollments: Math.ceil(totalEnrollments / limit),
+          })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);
