@@ -42,7 +42,7 @@ export const createEnrollment = async (
 export const getEnrollments = async (request: Request, response: Response) => {
   try {
     const page = parseInt(request.query.page as string) || 1;
-    const limit = 5;
+    const limit = Number(process.env.queryLimit) as number;
     const skip = (page - 1) * limit;
 
     const { centerId } = request.params;
@@ -59,12 +59,10 @@ export const getEnrollments = async (request: Request, response: Response) => {
         enrollmentDate: -1,
       });
     enrollments
-      ? response
-          .status(200)
-          .json({
-            enrollments,
-            totalEnrollments: Math.ceil(totalEnrollments / limit),
-          })
+      ? response.status(200).json({
+          enrollments,
+          totalEnrollments: Math.ceil(totalEnrollments / limit),
+        })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);

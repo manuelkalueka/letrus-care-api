@@ -35,13 +35,22 @@ export const createCourse = async (request: Request, response: Response) => {
 export const getCourses = async (request: Request, response: Response) => {
   try {
     const { centerId } = request.params;
-    const courses = await CourseModel.find({ status: "active", centerId }).sort(
-      {
+
+    const page = parseInt(request.query.page as string) || 1;
+    const limit = Number(process.env.queryLimit) as number;
+    const skip = (page - 1) * limit;
+    const totalCourses = await CourseModel.countDocuments({ centerId });
+
+    const courses = await CourseModel.find({ status: "active", centerId })
+      .limit(limit)
+      .skip(skip)
+      .sort({
         name: 1,
-      }
-    );
+      });
     courses
-      ? response.status(200).json(courses)
+      ? response
+          .status(200)
+          .json({ courses, totalCourses: Math.ceil(totalCourses / limit) })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);

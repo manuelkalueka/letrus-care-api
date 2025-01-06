@@ -41,7 +41,14 @@ export const createPayment = async (request: Request, response: Response) => {
 export const getPayments = async (request: Request, response: Response) => {
   try {
     const { centerId } = request.params;
+    const page = parseInt(request.query.page as string) || 1;
+    const limit = Number(process.env.queryLimit) as number;
+    const skip = (page - 1) * limit;
+    const totalPayments = await PaymentModel.countDocuments({ centerId });
+
     const payments = await PaymentModel.find({ centerId })
+      .skip(skip)
+      .limit(limit)
       .sort({
         dueDate: -1,
       })
@@ -52,7 +59,9 @@ export const getPayments = async (request: Request, response: Response) => {
         },
       });
     payments
-      ? response.status(200).json(payments)
+      ? response
+          .status(200)
+          .json({ payments, totalPayments: Math.ceil(totalPayments / limit) })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);

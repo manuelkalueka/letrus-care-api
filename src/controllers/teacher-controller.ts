@@ -39,17 +39,26 @@ export const createTeacher = async (request: Request, response: Response) => {
 };
 
 export const getTeachers = async (request: Request, response: Response) => {
-  const { centerId } = request.params;
   try {
+    const { centerId } = request.params;
+    const page = parseInt(request.query.page as string) || 1;
+    const limit = Number(process.env.queryLimit) as number;
+    const skip = (page - 1) * limit;
+    const totalTeachers = await TeacherModel.countDocuments({ centerId });
+    
     const teachers = await TeacherModel.find({
       centerId,
     })
+      .limit(limit)
+      .skip(skip)
       .sort({
         fullName: 1,
       })
       .populate("courses");
     teachers
-      ? response.status(200).json(teachers)
+      ? response
+          .status(200)
+          .json({ teachers, totalTeachers: Math.ceil(totalTeachers / limit) })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);
