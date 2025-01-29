@@ -57,6 +57,24 @@ export const getCourses = async (request: Request, response: Response) => {
   }
 };
 
+export const getCoursesWithoutLimit = async (request: Request, response: Response) => {
+  try {
+    const { centerId } = request.params;
+
+    const courses = await CourseModel.find({ status: "active", centerId })
+      .sort({
+        name: 1,
+      });
+    courses
+      ? response
+          .status(200)
+          .json(courses)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
 export const getInactiveCourses = async (
   request: Request,
   response: Response

@@ -5,11 +5,13 @@ import {
   editGrade,
   deleteGrade,
   getGrades,
+  getGradesWithoutLimit
 } from "../controllers/grade-controller";
 const gradeRouter = Router();
 
 gradeRouter.post("/new", createGrade);
-gradeRouter.get("/all/:centerId", getGrades);
+gradeRouter.get("/all/:centerId", getGradesWithoutLimit);
+gradeRouter.get("/all/paginated/:centerId", getGradesWithoutLimit);
 gradeRouter.get("/:id", getGrade);
 gradeRouter.put("/edit/:id", editGrade);
 gradeRouter.delete("/delete/:id", deleteGrade);

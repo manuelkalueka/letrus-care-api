@@ -6,12 +6,14 @@ import {
   getInactiveCourses,
   getCourse,
   getCourses,
+  getCoursesWithoutLimit
 } from "../controllers/course-controller";
 
 export const courseRouter = Router();
 courseRouter.post("/new", createCourse);
 
-courseRouter.get("/all/:centerId", getCourses);
+courseRouter.get("/all/:centerId", getCoursesWithoutLimit);
+courseRouter.get("/all/paginated/:centerId", getCoursesWithoutLimit);
 courseRouter.get("/inactive", getInactiveCourses);
 courseRouter.get("/:id", getCourse);
 courseRouter.put("/edit/:id", editCourse);

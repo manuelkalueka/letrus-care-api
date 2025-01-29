@@ -19,7 +19,7 @@ export const createGrade = async (request: Request, response: Response) => {
 export const getGrades = async (request: Request, response: Response) => {
   try {
     const { centerId } = request.params;
-    
+
     const page = parseInt(request.query.page as string) || 1;
     const limit = Number(process.env.queryLimit) as number;
     const skip = (page - 1) * limit;
@@ -35,6 +35,21 @@ export const getGrades = async (request: Request, response: Response) => {
       ? response
           .status(200)
           .json({ grades, totalGrades: Math.ceil(totalGrades / limit) })
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
+export const getGradesWithoutLimit = async (request: Request, response: Response) => {
+  try {
+    const { centerId } = request.params;
+
+    const grades = await GradeModel.find({ centerId }).sort({
+      grade: 1,
+    });
+    grades
+      ? response.status(200).json(grades)
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);
