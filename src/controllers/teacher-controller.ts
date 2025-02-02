@@ -65,6 +65,27 @@ export const getTeachers = async (request: Request, response: Response) => {
   }
 };
 
+export const getTeachersAll = async (request: Request, response: Response) => {
+  try {
+    const { centerId } = request.params;
+    
+    const teachers = await TeacherModel.find({
+      centerId,
+    })
+      .sort({
+        fullName: 1,
+      })
+      .populate("courses");
+    teachers
+      ? response
+          .status(200)
+          .json(teachers)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
 export const getTeacher = async (request: Request, response: Response) => {
   const { id } = request.params;
   try {

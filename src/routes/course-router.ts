@@ -13,7 +13,7 @@ export const courseRouter = Router();
 courseRouter.post("/new", createCourse);
 
 courseRouter.get("/all/:centerId", getCoursesWithoutLimit);
-courseRouter.get("/all/paginated/:centerId", getCoursesWithoutLimit);
+courseRouter.get("/all/paginated/:centerId", getCourses);
 courseRouter.get("/inactive", getInactiveCourses);
 courseRouter.get("/:id", getCourse);
 courseRouter.put("/edit/:id", editCourse);
