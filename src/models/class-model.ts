@@ -1,34 +1,36 @@
+import { randomUUID } from "crypto";
 import { Schema, model, Document } from "mongoose";
 
 export interface IClass extends Document {
-  course: Schema.Types.ObjectId;
+  course: Schema.Types.UUID;
   period: "morning" | "moon" | "evening";
-  grade: Schema.Types.ObjectId;
-  students: Schema.Types.ObjectId[];
-  teachers: Schema.Types.ObjectId[];
+  grade: Schema.Types.UUID;
+  students: Schema.Types.UUID[];
+  teachers: Schema.Types.UUID[];
   className: string;
-  center: Schema.Types.ObjectId;
+  center: Schema.Types.UUID;
   classLimit: number;
   status: "active" | "inactive";
-  userId: Schema.Types.ObjectId;
+  userId: Schema.Types.UUID;
   schedule: string;
 }
 
 const classSchema = new Schema<IClass>({
-  course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
+    _id: { type: Schema.Types.UUID, default: () => randomUUID() },
+  course: { type: Schema.Types.UUID, ref: "Course", required: true },
   period: {
     type: String,
     enum: ["morning", "moon", "evening"],
     required: true,
   },
-  students: [{ type: Schema.Types.ObjectId, ref: "Student" }],
-  teachers: [{ type: Schema.Types.ObjectId, ref: "Teacher", required: true }],
-  grade: { type: Schema.Types.ObjectId, ref: "Grade", required: true },
+  students: [{ type: Schema.Types.UUID, ref: "Student" }],
+  teachers: [{ type: Schema.Types.UUID, ref: "Teacher", required: true }],
+  grade: { type: Schema.Types.UUID, ref: "Grade", required: true },
   className: { type: String, required: true, unique: true },
-  center: { type: Schema.Types.ObjectId, ref: "Center", required: true },
+  center: { type: Schema.Types.UUID, ref: "Center", required: true },
   classLimit: { type: Number, default: 20 },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.UUID, ref: "User", required: true },
   schedule: { type: String, required: true },
 });
 

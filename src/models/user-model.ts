@@ -1,5 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 import bcrypt from "bcrypt";
+import { randomUUID } from "crypto";
 
 export interface IUser extends Document {
   username: string;
@@ -9,17 +10,19 @@ export interface IUser extends Document {
   updatedAt: Date;
 }
 
-const userSchema = new Schema<IUser>({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: {
-    type: String,
-    enum: ["admin", "teacher", "student"],
-    default: "admin",
+const userSchema = new Schema<IUser>(
+  {
+    _id: { type: Schema.Types.UUID, default: () => randomUUID() },
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["admin", "teacher", "student"],
+      default: "admin",
+    },
   },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
 // hook para hash de senha antes de salvar
 userSchema.pre("save", async function (next) {

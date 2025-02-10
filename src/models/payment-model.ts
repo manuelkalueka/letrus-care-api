@@ -1,7 +1,8 @@
+import { randomUUID } from "crypto";
 import { Schema, model, Document } from "mongoose";
 
 export interface IPayment extends Document {
-  enrollmentId: Schema.Types.ObjectId;
+  enrollmentId: Schema.Types.UUID;
   amount: number;
   paymentDate: Date;
   paymentMonthReference: string;
@@ -12,13 +13,14 @@ export interface IPayment extends Document {
     | "Transferência Bancária (ATM)";
   dueDate: Date;
   status: "paid" | "pending" | "overdue";
-  centerId: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
+  centerId: Schema.Types.UUID;
+  userId: Schema.Types.UUID;
 }
 
 const paymentSchema = new Schema<IPayment>({
+    _id: { type: Schema.Types.UUID, default: () => randomUUID() },
   enrollmentId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.UUID,
     ref: "Enrollment",
     required: true,
   },
@@ -37,8 +39,8 @@ const paymentSchema = new Schema<IPayment>({
     enum: ["Dinheiro", "Multicaixa Express", "Transferência Bancária (ATM)"],
     default: "Dinheiro",
   },
-  centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  centerId: { type: Schema.Types.UUID, ref: "Center", required: true },
+  userId: { type: Schema.Types.UUID, ref: "User", required: true },
 });
 
 // Hook para marcar a data de expiração do pagamento um mês após a data de pagamento

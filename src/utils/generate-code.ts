@@ -2,7 +2,7 @@ import { Model, Schema } from "mongoose";
 import { CenterModel, ICenter } from "../models/center-model";
 // Função para buscar o centro por ID
 async function getCenter(
-  centerId: Schema.Types.ObjectId,
+  centerId: Schema.Types.UUID,
   Model: Model<ICenter>
 ): Promise<ICenter | null> {
   try {
@@ -16,7 +16,7 @@ async function getCenter(
 
 // Função para criar o código do professor
 export async function createCode(
-  centerId: Schema.Types.ObjectId,
+  centerId: Schema.Types.UUID,
   role: string
 ): Promise<string> {
   try {
