@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { Schema, model, Document } from "mongoose";
 
 export interface ICourse extends Document {
@@ -8,20 +7,19 @@ export interface ICourse extends Document {
   endDate: Date;
   fee: number;
   feeFine: number;
-  centerId: Schema.Types.UUID;
+  centerId: Schema.Types.ObjectId;
   status: "active" | "inactive";
   courseType: "on_home" | "on_center";
 }
 
 const courseSchema = new Schema<ICourse>({
-    _id: { type: Schema.Types.UUID, default: () => randomUUID() },
   name: { type: String, required: true },
   description: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   fee: { type: Number, required: true },
   feeFine: { type: Number, required: true },
-  centerId: { type: Schema.Types.UUID, ref: "Center", required: true },
+  centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
   status: { type: String, enum: ["active", "inactive"], default: "active" },
   courseType: {
     type: String,
