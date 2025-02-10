@@ -96,21 +96,6 @@ export const getPayment = async (request: Request, response: Response) => {
   }
 };
 
-export const getStudentPayments = async (
-  request: Request,
-  response: Response
-) => {
-  const { enrollmentId } = request.params;
-  try {
-    const payment = await PaymentModel.find({ enrollmentId });
-    payment
-      ? response.status(200).json(payment)
-      : response.status(404).json(null);
-  } catch (error) {
-    response.status(500).json(error);
-  }
-};
-
 export const editPayment = async (request: Request, response: Response) => {
   const { id } = request.params;
 
