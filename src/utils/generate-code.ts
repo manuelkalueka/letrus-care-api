@@ -26,7 +26,7 @@ export async function createCode(
     }
 
     const centerCode = center.documentCode;
-    const charset = "0123456789LCMK";
+    const charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let generatedCode = "";
 
     for (let i = 0; i < 2; i++) {

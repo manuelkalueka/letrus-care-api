@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { PaymentModel, IPayment } from "../models/payment-model";
+import { IReceipt, ReceiptModel } from "../models/payments_receipt";
+import { createCode } from "../utils/generate-code";
 
 export const createPayment = async (request: Request, response: Response) => {
   const {
@@ -31,7 +33,16 @@ export const createPayment = async (request: Request, response: Response) => {
 
   try {
     await payment.save();
-    response.status(201).json(payment);
+    const receiptCode = await createCode(centerId, "P");
+    const partCode = Date.now().toString();
+
+    const receipt: IReceipt = new ReceiptModel({
+      paymentId: payment._id,
+      receiptNumber: receiptCode + partCode.slice(0, 4),
+    });
+
+    await receipt.save();
+    response.status(201).json({ payment, receipt });
   } catch (error) {
     console.error("Erro ao criar pagamento:", error);
     response.status(500).json({ error: "Erro interno do servidor" });
@@ -68,6 +79,22 @@ export const getPayments = async (request: Request, response: Response) => {
   }
 };
 
+export const getPaymentsByStudent = async (
+  request: Request,
+  response: Response
+) => {
+  try {
+    const { enrollmentId } = request.params;
+
+    const payments = await PaymentModel.find({ enrollmentId });
+    payments
+      ? response.status(200).json(payments)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
 export const getInactivePayments = async (
   request: Request,
   response: Response
@@ -87,9 +114,15 @@ export const getInactivePayments = async (
 export const getPayment = async (request: Request, response: Response) => {
   const { id } = request.params;
   try {
-    const payment = await PaymentModel.findById(id);
+    const payment = await PaymentModel.findById(id).populate({
+      path: "enrollmentId",
+      populate: {
+        path: "studentId",
+      },
+    });
+    const receipt = await ReceiptModel.findOne({ paymentId: id });
     payment
-      ? response.status(200).json(payment)
+      ? response.status(200).json({ payment, receipt })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);

@@ -1,6 +1,6 @@
 {
   "name": "letrus-care-api",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "license": "MIT",
   "author": {
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "npx tsc && node dist/index.js",
     "dev": "nodemon"
   },
   "dependencies": {
