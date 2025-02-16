@@ -13,6 +13,7 @@ export const createPayment = async (request: Request, response: Response) => {
     paymentMethod,
     centerId,
     userId,
+    lateFee,
   } = request.body;
 
   // Verificação dos campos obrigatórios
@@ -29,6 +30,7 @@ export const createPayment = async (request: Request, response: Response) => {
     paymentMethod,
     centerId,
     userId,
+    lateFee,
   });
 
   try {
@@ -38,7 +40,7 @@ export const createPayment = async (request: Request, response: Response) => {
 
     const receipt: IReceipt = new ReceiptModel({
       paymentId: payment._id,
-      receiptNumber: receiptCode + partCode.slice(0, 4),
+      receiptNumber: receiptCode + partCode.slice(0, 3),
     });
 
     await receipt.save();
@@ -114,12 +116,14 @@ export const getInactivePayments = async (
 export const getPayment = async (request: Request, response: Response) => {
   const { id } = request.params;
   try {
-    const payment = await PaymentModel.findById(id).populate({
-      path: "enrollmentId",
-      populate: {
-        path: "studentId",
-      },
-    });
+    const payment = await PaymentModel.findById(id)
+      .populate({
+        path: "enrollmentId",
+        populate: {
+          path: "studentId courseId grade",
+        },
+      })
+      .populate("userId");
     const receipt = await ReceiptModel.findOne({ paymentId: id });
     payment
       ? response.status(200).json({ payment, receipt })

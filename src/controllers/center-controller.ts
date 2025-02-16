@@ -2,8 +2,16 @@ import { Request, Response } from "express";
 import { CenterModel, ICenter } from "../models/center-model";
 
 export const createCenter = async (request: Request, response: Response) => {
-  const { name, address, nif, phoneNumber, email, documentCode, createdBy } =
-    request.body;
+  const {
+    name,
+    address,
+    nif,
+    phoneNumber,
+    email,
+    documentCode,
+    createdBy,
+    year_school,
+  } = request.body;
   try {
     const center: ICenter = new CenterModel({
       name,
@@ -13,6 +21,7 @@ export const createCenter = async (request: Request, response: Response) => {
       email,
       documentCode,
       createdBy,
+      year_school,
     });
 
     await center.save();
