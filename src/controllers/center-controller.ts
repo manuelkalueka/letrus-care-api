@@ -10,7 +10,7 @@ export const createCenter = async (request: Request, response: Response) => {
     email,
     documentCode,
     createdBy,
-    year_school,
+    year_school
   } = request.body;
   try {
     const center: ICenter = new CenterModel({

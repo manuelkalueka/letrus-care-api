@@ -28,7 +28,7 @@ const centerSchema = new Schema<ICenter>({
     unique: true,
   },
   createdAt: { type: Date, default: Date.now },
-  documentCode: { type: String, required: true, unique: true },
+  documentCode: { type: String, required: true, unique: true, maxlength: 5 },
   fileType: String,
   fileData: String,
 });

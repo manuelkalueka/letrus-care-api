@@ -231,12 +231,16 @@ export const searchPayments = async (request: Request, response: Response) => {
     const payments = await PaymentModel.find({
       centerId,
       enrollmentId: { $in: enrollmentIds },
-    }).populate({
-      path: "enrollmentId",
-      populate: {
-        path: "studentId",
-      },
-    });
+    })
+      .populate({
+        path: "enrollmentId",
+        populate: {
+          path: "studentId",
+        },
+      })
+      .sort({
+        paymentDate: -1,
+      });
 
     response.json(payments);
   } catch (error) {
