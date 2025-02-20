@@ -86,19 +86,17 @@ export const searchStudent = async (request: Request, response: Response) => {
         .json({ message: "Query string precisa ser string." });
     }
 
-    // Buscar estudantes com base no $text search
-    const result = await StudentModel.find({
+    const results = await StudentModel.find({
       centerId,
       $text: { $search: query },
     });
 
-    // Retornar o estudante se encontrado ou 404 se não encontrado
-    if (result) {
-      return response.status(200).json(result);
+    if (results) {
+      return response.status(200).json(results);
     } else {
       return response
         .status(404)
-        .json({ message: "Estudante não encontrado." });
+        .json({ message: "nenhum Estudante encontrado." });
     }
   } catch (error) {
     // Tratar qualquer erro que ocorrer durante a busca

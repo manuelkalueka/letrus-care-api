@@ -17,7 +17,7 @@ export interface IStudent extends Document {
 const studentSchema = new Schema<IStudent>({
   name: {
     fullName: { type: String, required: true },
-    surname: { type: String },
+    surname: { type: String, unique: true },
   },
   birthDate: { type: Date, required: true },
   gender: { type: String, enum: ["masculino", "feminino"] },
@@ -36,9 +36,9 @@ const studentSchema = new Schema<IStudent>({
 
 // criação de índice de texto
 studentSchema.index({
+  "name.surname": "text",
   "name.fullName": "text",
   studentCode: "text",
-  "name.surname": "text",
 });
 
 export const StudentModel = model<IStudent>("Student", studentSchema);

@@ -47,7 +47,8 @@ export const getClasses = async (request: Request, response: Response) => {
         className: 1,
       })
       .populate({ path: "grade", select: "grade" })
-      .populate({ path: "course", select: "name" });
+      .populate({ path: "course", select: "name" })
+      .populate({ path: "teachers", select: "fullName" });
     classesInCenter
       ? response.status(200).json(classesInCenter)
       : response.status(404).json(null);

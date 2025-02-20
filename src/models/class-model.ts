@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { Schema, model, Document } from "mongoose";
 
 export interface IClass extends Document {

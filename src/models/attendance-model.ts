@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { Schema, model, Document } from "mongoose";
 
 export interface IAttendance extends Document {
@@ -16,7 +15,7 @@ const attendanceSchema = new Schema<IAttendance>({
   date: { type: Date, required: true },
   status: { type: String, enum: ["present", "absent"], required: true },
   note: String,
-  isJustified: { type: Boolean, default: true },
+  isJustified: { type: Boolean },
 });
 
 export const AttendanceModel = model<IAttendance>(

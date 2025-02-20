@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { PaymentModel, IPayment } from "../models/payment-model";
 import { IReceipt, ReceiptModel } from "../models/payments_receipt";
 import { createCode } from "../utils/generate-code";
+import { StudentModel } from "../models/student-model";
+import { EnrollmentModel } from "../models/enrollment-model";
 
 export const createPayment = async (request: Request, response: Response) => {
   const {
@@ -191,5 +193,53 @@ export const updatePaymentStatus = async (
   } catch (error) {
     console.error("Erro ao atualizar o status do pagamento:", error);
     response.status(500).json({ error: "Erro interno do servidor" });
+  }
+};
+
+export const searchPayments = async (request: Request, response: Response) => {
+  try {
+    const { centerId } = request.params;
+    const { query } = request.query;
+
+    if (!query) {
+      return response
+        .status(400)
+        .json({ message: "O termo de busca é obrigatório." });
+    }
+
+    // Buscar estudantes com base no $text search
+    const students = await StudentModel.find({
+      centerId,
+      $text: { $search: query as string },
+    }).select("_id");
+
+    if (students.length === 0) {
+      return response.json([]);
+    }
+
+    const studentIds = students.map((s) => s._id);
+
+    // Buscar inscrições ligados a esses estudantes
+    const enrollments = await EnrollmentModel.find({
+      centerId,
+      studentId: { $in: studentIds },
+    }).select("_id");
+
+    const enrollmentIds = enrollments.map((e) => e._id);
+
+    // Buscar pagamentos ligados a esses estudantes
+    const payments = await PaymentModel.find({
+      centerId,
+      enrollmentId: { $in: enrollmentIds },
+    }).populate({
+      path: "enrollmentId",
+      populate: {
+        path: "studentId",
+      },
+    });
+
+    response.json(payments);
+  } catch (error) {
+    response.status(500).json({ message: "Erro ao buscar pagamentos", error });
   }
 };
