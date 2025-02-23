@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
+  changeStatus,
   createEnrollment,
-  deleteEnrollment,
   editEnrollment,
   getEnrollment,
   getEnrollmentByStudentId,
@@ -20,4 +20,4 @@ enrollmentRouter.get("/all/:centerId", getEnrollments);
 enrollmentRouter.get("/:id", getEnrollment);
 enrollmentRouter.get("/student/:studentId", getEnrollmentByStudentId);
 enrollmentRouter.put("/edit/:id", editEnrollment);
-enrollmentRouter.delete("/delete/:id", deleteEnrollment);
+enrollmentRouter.patch("/status/:id", changeStatus);

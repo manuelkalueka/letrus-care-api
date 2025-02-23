@@ -15,10 +15,6 @@ export const createEnrollment = async (
     userId,
   }: IEnrollment = request.body;
 
-  // // Arquivos recebidos estão disponíveis em req.files as Express.Multer.File[]
-  // const docFile = request.files.doc_file[0];
-  // const imageFile = request.files.image_file[0];
-
   const enrollment: IEnrollment = new EnrollmentModel({
     studentId,
     courseId,
@@ -27,8 +23,6 @@ export const createEnrollment = async (
     centerId,
     grade,
     userId,
-    // docFile: docFile?.path, // Caminho do documento
-    // image_file: imageFile?.path, // Caminho da imagem
   });
   try {
     await enrollment.save();
@@ -47,9 +41,15 @@ export const getEnrollments = async (request: Request, response: Response) => {
 
     const { centerId } = request.params;
 
-    const totalEnrollments = await EnrollmentModel.countDocuments({ centerId });
+    const totalEnrollments = await EnrollmentModel.countDocuments({
+      centerId,
+      status: { $ne: "dropped" },
+    });
 
-    const enrollments = await EnrollmentModel.find({ centerId })
+    const enrollments = await EnrollmentModel.find({
+      centerId,
+      status: { $ne: "dropped" },
+    })
       .skip(skip)
       .limit(limit)
       .populate("studentId")
@@ -126,14 +126,20 @@ export const editEnrollment = async (request: Request, response: Response) => {
   }
 };
 
-export const deleteEnrollment = async (
-  request: Request,
-  response: Response
-) => {
+export const changeStatus = async (request: Request, response: Response) => {
   const { id } = request.params;
+  const { status } = request.body;
   try {
-    await EnrollmentModel.deleteOne({ _id: id });
-    response.status(204).json({ message: "success" });
+    const enrollment = await EnrollmentModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          status,
+        },
+      },
+      { $upsert: true, new: true }
+    );
+    response.status(204).json(enrollment);
   } catch (error) {
     response.status(500).json(error);
   }

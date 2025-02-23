@@ -22,9 +22,12 @@ export const createAttendance = async (
 };
 
 export const getAttendances = async (request: Request, response: Response) => {
-  const { status } = request.query;
+  const { classId } = request.params;
   try {
-    const attendances = await AttendanceModel.find({ status }).sort({
+    const attendances = await AttendanceModel.find({
+      classId,
+      status: { $ne: "absent" },
+    }).sort({
       date: -1,
     });
     attendances
@@ -49,13 +52,12 @@ export const getAttendance = async (request: Request, response: Response) => {
 
 export const editAttendance = async (request: Request, response: Response) => {
   const { id } = request.params;
-  const { date, note, isJustified }: IAttendance = request.body;
+  const { note, isJustified }: IAttendance = request.body;
   try {
     const attendance = await AttendanceModel.findOneAndUpdate(
       { _id: id },
       {
         $set: {
-          date,
           note,
           isJustified,
         },
@@ -89,19 +91,6 @@ export const updateAttendanceStatus = async (
     attendance
       ? response.status(200).json(attendance)
       : response.status(404).json(null);
-  } catch (error) {
-    response.status(500).json(error);
-  }
-};
-
-export const deleteAttendance = async (
-  request: Request,
-  response: Response
-) => {
-  const { id } = request.params;
-  try {
-    await AttendanceModel.deleteOne({ _id: id });
-    response.status(204).json({ message: "success" });
   } catch (error) {
     response.status(500).json(error);
   }

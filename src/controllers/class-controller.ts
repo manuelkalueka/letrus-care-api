@@ -42,13 +42,16 @@ export const getClasses = async (request: Request, response: Response) => {
   try {
     const classesInCenter = await ClassModel.find({
       center: centerId,
+      status: "active",
     })
       .sort({
         className: 1,
       })
       .populate({ path: "grade", select: "grade" })
       .populate({ path: "course", select: "name courseType" })
-      .populate({ path: "teachers", select: "fullName" });
+      .populate({ path: "teachers", select: "fullName" })
+      .populate({ path: "students", select: "name studentCode" });
+
     classesInCenter
       ? response.status(200).json(classesInCenter)
       : response.status(404).json(null);
@@ -60,7 +63,11 @@ export const getClasses = async (request: Request, response: Response) => {
 export const getClass = async (request: Request, response: Response) => {
   const { id } = request.params;
   try {
-    const classInCenter = await ClassModel.findById(id);
+    const classInCenter = await ClassModel.findById(id)
+      .populate({ path: "grade", select: "grade" })
+      .populate({ path: "course", select: "name courseType" })
+      .populate({ path: "teachers", select: "fullName" })
+      .populate({ path: "students", select: "name studentCode" });
     classInCenter
       ? response.status(200).json(classInCenter)
       : response.status(404).json(null);

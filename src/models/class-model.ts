@@ -15,7 +15,6 @@ export interface IClass extends Document {
 }
 
 const classSchema = new Schema<IClass>({
-   
   course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
   period: {
     type: String,
@@ -31,6 +30,10 @@ const classSchema = new Schema<IClass>({
   status: { type: String, enum: ["active", "inactive"], default: "active" },
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   schedule: { type: String, required: true },
+});
+
+classSchema.index({
+  className: "text",
 });
 
 export const ClassModel = model<IClass>("Class", classSchema);
