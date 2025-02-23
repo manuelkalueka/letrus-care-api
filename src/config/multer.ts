@@ -6,8 +6,8 @@ const storage = multer.memoryStorage();
 
 const storageDisk = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Salva os arquivos na pasta "uploads/docs"
-    cb(null, path.resolve(__dirname, "../uploads/docs"));
+    // Salva os arquivos na pasta "uploads/imgs"
+    cb(null, path.resolve(__dirname, "../uploads/imgs"));
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);

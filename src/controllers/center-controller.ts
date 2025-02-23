@@ -10,7 +10,7 @@ export const createCenter = async (request: Request, response: Response) => {
     email,
     documentCode,
     createdBy,
-    year_school
+    year_school,
   } = request.body;
   try {
     const center: ICenter = new CenterModel({
@@ -108,31 +108,17 @@ export const addLogoInCenter = async (request: Request, response: Response) => {
         },
       },
       { $upsert: true, new: true }
-    ).select(["fileData", "fileType, documentCode"]);
+    );
+
     if (!centerForUpdate) {
       return response
         .status(404)
         .json({ message: "centro não encontrado", center: null });
-    } else {
-      // Buscar o título do projeto associado
-      const logoTitle = `logo_${centerForUpdate.documentCode}`;
-      const logoData = centerForUpdate?.fileData;
-
-      // Convertendo o dado base64 para buffer
-      if (logoData) {
-        const buffer = Buffer.from(logoData, "base64");
-        response.set({
-          "Content-Type": centerForUpdate.fileType,
-          "Content-Disposition": `attachment; filename="${logoTitle}.${
-            centerForUpdate.fileType?.split("/")[1]
-          }"`,
-        });
-
-        // Enviando o buffer do áudio
-        response.send(buffer);
-      }
     }
+
+    response.json(centerForUpdate);
   } catch (error) {
     response.status(500).json(error);
+    console.log(error);
   }
 };
