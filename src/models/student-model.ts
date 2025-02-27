@@ -8,7 +8,6 @@ export interface IStudent extends Document {
   address: string;
   phoneNumber: string;
   email?: string;
-  status: "active" | "inactive";
   centerId: Schema.Types.ObjectId;
   endStudiedDate: Date;
   studentCode: string;
@@ -28,7 +27,6 @@ const studentSchema = new Schema<IStudent>({
   address: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   email: { type: String },
-  status: { type: String, enum: ["active", "inactive"], default: "active" },
   endStudiedDate: { type: Date, default: null },
   centerId: { type: Schema.Types.ObjectId, ref: "Center", required: true },
   studentCode: { type: String, required: true, unique: true },

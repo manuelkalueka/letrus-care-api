@@ -79,14 +79,13 @@ export const getClass = async (request: Request, response: Response) => {
 export const editClass = async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const { period, students, teachers, classLimit, schedule } = request.body;
+  const { period, teachers, classLimit, schedule ,className} = request.body;
   try {
     const classInCenter = await ClassModel.findOneAndUpdate(
       { _id: id },
       {
         $set: {
-          period,
-          students,
+          period,className,
           teachers,
           classLimit,
           schedule,
@@ -97,6 +96,30 @@ export const editClass = async (request: Request, response: Response) => {
     classInCenter
       ? response.status(200).json(classInCenter)
       : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
+export const addStudentsOnClass = async (
+  request: Request,
+  response: Response
+) => {
+  const { id } = request.params;
+
+  const { studentId } = request.body;
+  try {
+    const classInCenter = await ClassModel.findById(id);
+    if (!classInCenter)
+      return response.status(404).json({ message: "turma não encontrada" });
+    if (classInCenter.students.length >= classInCenter.classLimit)
+      return response.status(400).json({ message: "Limite da Turma Excedido" });
+
+    classInCenter.students.push(studentId);
+
+    await classInCenter.save();
+
+    response.status(200).json(classInCenter);
   } catch (error) {
     response.status(500).json(error);
   }

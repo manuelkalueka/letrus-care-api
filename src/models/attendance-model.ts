@@ -7,11 +7,13 @@ export interface IAttendance extends Document {
   status: "present" | "absent";
   note: string;
   isJustified: boolean;
+  topic: string;
 }
 
 const attendanceSchema = new Schema<IAttendance>({
   student: { type: Schema.Types.ObjectId, ref: "Student", required: true },
   classId: { type: Schema.Types.ObjectId, ref: "Class", required: true },
+  topic: { type: String, required: true },
   date: { type: Date, required: true },
   status: { type: String, enum: ["present", "absent"], required: true },
   note: String,

@@ -35,23 +35,7 @@ export const createStudent = async (request: Request, response: Response) => {
 
 export const getStudents = async (request: Request, response: Response) => {
   try {
-    const students = await StudentModel.find({ status: "active" }).sort({
-      "name.fullName": 1,
-    });
-    students
-      ? response.status(200).json(students)
-      : response.status(404).json(null);
-  } catch (error) {
-    response.status(500).json(error);
-  }
-};
-
-export const getInactiveStudents = async (
-  request: Request,
-  response: Response
-) => {
-  try {
-    const students = await StudentModel.find({ status: "inactive" }).sort({
+    const students = await StudentModel.find().sort({
       "name.fullName": 1,
     });
     students

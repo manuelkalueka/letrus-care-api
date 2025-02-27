@@ -5,13 +5,15 @@ export const createAttendance = async (
   request: Request,
   response: Response
 ) => {
-  const { student, classId, date, status, note }: IAttendance = request.body;
+  const { student, classId, date, status, note, topic }: IAttendance =
+    request.body;
   const attendance: IAttendance = new AttendanceModel({
     student,
     classId,
     date,
     status,
     note,
+    topic,
   });
   try {
     await attendance.save();
@@ -52,12 +54,13 @@ export const getAttendance = async (request: Request, response: Response) => {
 
 export const editAttendance = async (request: Request, response: Response) => {
   const { id } = request.params;
-  const { note, isJustified }: IAttendance = request.body;
+  const { note, isJustified, topic }: IAttendance = request.body;
   try {
     const attendance = await AttendanceModel.findOneAndUpdate(
       { _id: id },
       {
         $set: {
+          topic,
           note,
           isJustified,
         },

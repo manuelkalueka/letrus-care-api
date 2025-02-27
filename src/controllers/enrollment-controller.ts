@@ -69,6 +69,33 @@ export const getEnrollments = async (request: Request, response: Response) => {
   }
 };
 
+export const getStudentsForAddOnClass = async (
+  request: Request,
+  response: Response
+) => {
+  try {
+    const { centerId } = request.params;
+    const { courseId, grade } = request.query;
+
+    const enrollments = await EnrollmentModel.find({
+      centerId,
+      courseId,
+      grade,
+      status: "completed",
+    })
+      .select("studentId")
+      .populate("studentId")
+      .sort({
+        enrollmentDate: -1,
+      });
+    enrollments.length !== 0
+      ? response.status(200).json(enrollments)
+      : response.status(404).json(null);
+  } catch (error) {
+    response.status(500).json(error);
+  }
+};
+
 export const getEnrollment = async (request: Request, response: Response) => {
   const { id } = request.params;
   try {
