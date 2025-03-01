@@ -44,10 +44,14 @@ export const getTeachers = async (request: Request, response: Response) => {
     const page = parseInt(request.query.page as string) || 1;
     const limit = Number(process.env.queryLimit) as number;
     const skip = (page - 1) * limit;
-    const totalTeachers = await TeacherModel.countDocuments({ centerId });
-    
+    const totalTeachers = await TeacherModel.countDocuments({
+      centerId,
+      status: "active",
+    });
+
     const teachers = await TeacherModel.find({
       centerId,
+      status: "active",
     })
       .limit(limit)
       .skip(skip)
@@ -68,18 +72,17 @@ export const getTeachers = async (request: Request, response: Response) => {
 export const getTeachersAll = async (request: Request, response: Response) => {
   try {
     const { centerId } = request.params;
-    
+
     const teachers = await TeacherModel.find({
       centerId,
+      status: "active",
     })
       .sort({
         fullName: 1,
       })
       .populate("courses");
     teachers
-      ? response
-          .status(200)
-          .json(teachers)
+      ? response.status(200).json(teachers)
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);
@@ -137,8 +140,7 @@ export const updateTeacherStatus = async (
   request: Request,
   response: Response
 ) => {
-  const { id } = request.params;
-  const { status } = request.query;
+  const { id, status } = request.params;
   try {
     await TeacherModel.findOneAndUpdate(
       { _id: id },

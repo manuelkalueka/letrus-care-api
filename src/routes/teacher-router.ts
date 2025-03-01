@@ -15,4 +15,4 @@ teacherRouter.get("/all/paginated/:centerId", getTeachers);
 
 teacherRouter.get("/:id", getTeacher);
 teacherRouter.put("/edit/:id", editTeacher);
-teacherRouter.patch("/:id/status", updateTeacherStatus);
+teacherRouter.patch("/:id/:status", updateTeacherStatus);
