@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { EnrollmentModel, IEnrollment } from "../models/enrollment-model";
+import { createCode } from "../utils/generate-code";
+import { IEnrollmentReceipt, ReceiptModel } from "../models/enrollment_receipt";
 
 export const createEnrollment = async (
   request: Request,
@@ -26,7 +28,16 @@ export const createEnrollment = async (
   });
   try {
     await enrollment.save();
-    response.status(201).json(enrollment);
+    const receiptCode = await createCode(centerId, "E");
+    const partCode = Date.now().toString();
+
+    const receipt: IEnrollmentReceipt = new ReceiptModel({
+      enrollmentId: enrollment._id,
+      receiptNumber: receiptCode + partCode.slice(0, 3),
+    });
+
+    await receipt.save();
+    response.status(201).json({ enrollment, receipt });
   } catch (error) {
     console.log(error);
     response.status(500).json(error);
@@ -101,10 +112,13 @@ export const getEnrollment = async (request: Request, response: Response) => {
   try {
     const enrollment = await EnrollmentModel.findById(id)
       .populate("studentId")
-      .populate({ path: "courseId", select: "name" })
-      .populate({ path: "grade", select: "grade" });
+      .populate({ path: "courseId", select: "name enrollmentFee" })
+      .populate({ path: "grade", select: "grade" })
+      .populate("userId");
+    enrollment;
+    const receipt = await ReceiptModel.findOne({ enrollmentId: id });
     enrollment
-      ? response.status(200).json(enrollment)
+      ? response.status(200).json({ enrollment, receipt })
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);

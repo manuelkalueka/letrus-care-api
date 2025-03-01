@@ -12,6 +12,7 @@ export const createCourse = async (request: Request, response: Response) => {
     status,
     feeFine,
     courseType,
+    enrollmentFee,
   }: ICourse = request.body;
   const course: ICourse = new CourseModel({
     name,
@@ -23,6 +24,7 @@ export const createCourse = async (request: Request, response: Response) => {
     status,
     feeFine,
     courseType,
+    enrollmentFee,
   });
   try {
     await course.save();
@@ -57,18 +59,20 @@ export const getCourses = async (request: Request, response: Response) => {
   }
 };
 
-export const getCoursesWithoutLimit = async (request: Request, response: Response) => {
+export const getCoursesWithoutLimit = async (
+  request: Request,
+  response: Response
+) => {
   try {
     const { centerId } = request.params;
 
-    const courses = await CourseModel.find({ status: "active", centerId })
-      .sort({
+    const courses = await CourseModel.find({ status: "active", centerId }).sort(
+      {
         name: 1,
-      });
+      }
+    );
     courses
-      ? response
-          .status(200)
-          .json(courses)
+      ? response.status(200).json(courses)
       : response.status(404).json(null);
   } catch (error) {
     response.status(500).json(error);
@@ -113,6 +117,7 @@ export const editCourse = async (request: Request, response: Response) => {
     fee,
     feeFine,
     courseType,
+    enrollmentFee,
   }: ICourse = request.body;
   try {
     const course = await CourseModel.findOneAndUpdate(
@@ -126,6 +131,7 @@ export const editCourse = async (request: Request, response: Response) => {
           fee,
           feeFine,
           courseType,
+          enrollmentFee,
         },
       },
       { $upsert: true, new: true }
